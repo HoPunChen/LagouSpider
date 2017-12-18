@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-
+import os
+import sys
 # Scrapy settings for LagouSpider project
 #
 # For simplicity, this file contains only settings considered important or
@@ -14,12 +15,13 @@ BOT_NAME = 'LagouSpider'
 SPIDER_MODULES = ['LagouSpider.spiders']
 NEWSPIDER_MODULE = 'LagouSpider.spiders'
 
-
+sys.path.insert(0,os.path.abspath(os.path.dirname(__file__)))
+print(os.path.abspath(os.path.dirname(__file__)))
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'LagouSpider (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
