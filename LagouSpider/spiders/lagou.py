@@ -10,10 +10,12 @@ class LagouSpider(CrawlSpider):
     start_urls = ['https://www.lagou.com/']
 
     rules = (
-        Rule(LinkExtractor(allow=r'Items/'), callback='parse_item', follow=True),
+        Rule(LinkExtractor(allow=r'zhaopin/.*',), follow=True),
+        Rule(LinkExtractor(allow=r'gongsi/j\d+.html',), follow=True),
+        Rule(LinkExtractor(allow=r'jobs/\d+.html'), callback='parse_job', follow=True),
     )
 
-    def parse_item(self, response):
+    def parse_job(self, response):
         #解析拉勾网的职位
         i = {}
         #i['domain_id'] = response.xpath('//input[@id="sid"]/@value').extract()
