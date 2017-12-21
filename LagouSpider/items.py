@@ -34,6 +34,7 @@ class LagouJobItemLoader(ItemLoader):
 class LagouJobItem(scrapy.Item):
     title = scrapy.Field()
     url = scrapy.Field()
+    url_object_id =scrapy.Field()
     salary = scrapy.Field()
     job_city = scrapy.Field(
         input_processor = MapCompose(replace_splash),
@@ -58,6 +59,7 @@ class LagouJobItem(scrapy.Item):
     )
 
     company_url = scrapy.Field()
+    tags = scrapy.Field()
     crawl_time = scrapy.Field()
     crawl_update_time = scrapy.Field()
 
