@@ -8,6 +8,7 @@
 import MySQLdb
 import MySQLdb.cursors
 from twisted.enterprise import adbapi
+
 class LagouspiderPipeline(object):
     def process_item(self, item, spider):
         return item
@@ -40,7 +41,7 @@ class MysqlTwistedPipline(object):
         # 处理异步插入的异常
         print(failure)
 
-    def do_insert(self):
+    def do_insert(self,item,spider):
         # 执行具体的插入
         # 根据不同的item 构建不同的sql语句并插入到mysql中
         insert_sql,params = item.get_insert_sql()

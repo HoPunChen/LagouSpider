@@ -9,7 +9,7 @@ import scrapy
 from scrapy.loader import ItemLoader
 from scrapy.loader.processors import TakeFirst,MapCompose
 from w3lib.html import remove_tags
-from utils.common import extract_num
+from LagouSpider.utils.common import extract_num
 
 class LagouspiderItem(scrapy.Item):
     # define the fields for your item here like:
@@ -32,6 +32,7 @@ class LagouJobItemLoader(ItemLoader):
     default_output_processor = TakeFirst()
 
 class LagouJobItem(scrapy.Item):
+    #拉勾网职位信息
     title = scrapy.Field()
     url = scrapy.Field()
     url_object_id =scrapy.Field()
