@@ -7,9 +7,10 @@
 
 import scrapy
 from scrapy.loader import ItemLoader
-from scrapy.loader.processors import TakeFirst,MapCompose
+from scrapy.loader.processors import TakeFirst,MapCompose,Join
 from w3lib.html import remove_tags
 from LagouSpider.utils.common import extract_num
+from LagouSpider.settings import SQL_DATE_FORMAT,SQL_DATETIME_FORMAT
 
 class LagouspiderItem(scrapy.Item):
     # define the fields for your item here like:
@@ -17,6 +18,7 @@ class LagouspiderItem(scrapy.Item):
     pass
 
 def replace_splash(value):
+    #去掉斜线
     return value.replace("/","")
 
 def handle_strip(value):
@@ -60,21 +62,23 @@ class LagouJobItem(scrapy.Item):
     )
 
     company_url = scrapy.Field()
-    tags = scrapy.Field()
+    tags = scrapy.Field(
+        input_processor = Join(",")
+    )
     crawl_time = scrapy.Field()
     crawl_update_time = scrapy.Field()
 
     def get_insert_sql(self):
         insert_sql = """
-             insert into lagou_job(title, url, salary, job_city, work_years, degree_need,
-            job_type, publish_time, job_advantage, job_desc, job_addr, company_name, company_url, job_id)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE job_desc=VALUES(job_desc)
+             insert into lagou_job(title, url, url_object_idsalary, job_city, work_years, degree_need,
+            job_type, publish_time, job_advantage, job_desc, job_addr, company_name, company_url, tags, crawl_time)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE salary=VALUES(salary) job_desc=VALUES(job_desc)
         """
 
         job_id = extract_num(self["url"])
-        params = (self["title"],self["url"],self["salary"],self["job_city"],self["work_years"],self["degree_need"],
+        params = (self["title"],self["url"],self["url_object_id"],self["salary"],self["job_city"],self["work_years"],self["degree_need"],
                   self["job_type"],self["publish_time"],self["job_advantage"],self["job_desc"],self["job_addr"],
-                  self["company_name"],self["company_url"],job_id)
+                  self["company_name"],self["company_url"],self["tags"],self["crawl_time"].strftime(SQL_DATETIME_FORMAT))
 
         return insert_sql,params
 

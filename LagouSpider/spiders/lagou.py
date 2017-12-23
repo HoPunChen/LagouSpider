@@ -6,10 +6,11 @@ from LagouSpider.items import LagouJobItemLoader,LagouJobItem
 from LagouSpider.utils import common
 from datetime import datetime
 
+
 class LagouSpider(CrawlSpider):
     name = 'lagou'
     allowed_domains = ['www.lagou.com']
-    start_urls = ['https://www.lagou.com/']
+    start_urls = ['https://www.lagou.com/jobs/3511478']
 
     rules = (
         Rule(LinkExtractor(allow=r'zhaopin/.*',), follow=True),
@@ -38,7 +39,7 @@ class LagouSpider(CrawlSpider):
         item_loader.add_css("company_name", "#job_company dt a div h2::text")
 
         item_loader.add_value("tags",".position-label li::text")
-        item_loader.add_css("crawl_time",datetime.now())
+        item_loader.add_value("crawl_time",datetime.now())
 
         job_item = item_loader.load_item()
         return job_item
